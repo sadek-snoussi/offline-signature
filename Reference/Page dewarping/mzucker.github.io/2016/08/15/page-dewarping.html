@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+
+  
+<!-- Mirrored from mzucker.github.io/2016/08/15/page-dewarping.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 26 Feb 2023 13:46:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Page dewarping</title>
+  <meta name="description" content="Flattening images of curled pages, as an optimization problem.">
+
+  <link rel="shortcut icon" href="https://mzucker.github.io/images/favicon.ico">
+  <link rel="stylesheet" href="../../../css/main.css">
+  <link rel="canonical" href="page-dewarping.html">
+  <link rel="alternate" type="application/rss+xml" title="Needlessly complex" href="https://mzucker.github.io/feed.xml">
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-82495353-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Page dewarping | Needlessly complex</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Page dewarping" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Flattening images of curled pages, as an optimization problem." />
+<meta property="og:description" content="Flattening images of curled pages, as an optimization problem." />
+<link rel="canonical" href="page-dewarping.html" />
+<meta property="og:url" content="https://mzucker.github.io/2016/08/15/page-dewarping.html" />
+<meta property="og:site_name" content="Needlessly complex" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-08-15T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Page dewarping" />
+<meta name="twitter:site" content="@matt_zucker" />
+<meta name="twitter:creator" content="@matt_zucker" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2016-08-15T00:00:00+00:00","datePublished":"2016-08-15T00:00:00+00:00","description":"Flattening images of curled pages, as an optimization problem.","headline":"Page dewarping","mainEntityOfPage":{"@type":"WebPage","@id":"https://mzucker.github.io/2016/08/15/page-dewarping.html"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://mzucker.github.io/images/nclogo.png"}},"url":"https://mzucker.github.io/2016/08/15/page-dewarping.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="https://mzucker.github.io/">
+      <span style="display: inline-block; height: 18px; width: 18px;"><svg viewBox="0 0 32 32"><path d="M19.03 15.96c0.44-0.47 0.95-0.83 1.53-1.08s1.2-0.37 1.85-0.37c0.7 0 1.38 0.08 2.04 0.23s1.31 0.39 1.94 0.73v-2.43c-0.6-0.24-1.24-0.42-1.9-0.53s-1.38-0.16-2.14-0.16c-1.09 0-2.1 0.18-3 0.55 -0.67 0.27-1.27 0.63-1.81 1.07v-3.55c0-1.8-0.39-3.14-1.16-4.04s-1.92-1.34-3.43-1.34c-0.43 0-0.84 0.04-1.25 0.12s-0.79 0.23-1.18 0.43S9.74 6.06 9.34 6.4s-0.81 0.76-1.25 1.27L7.99 5.29H5.72V20h2.55v-9.76C8.74 9.66 9.16 9.17 9.54 8.78s0.73-0.7 1.05-0.93 0.63-0.39 0.93-0.48 0.6-0.14 0.92-0.14c0.85 0 1.49 0.28 1.92 0.83s0.65 1.4 0.65 2.56v8.44c-0.03 0.32-0.05 0.65-0.05 0.99 0 2.42 0.63 4.26 1.88 5.52s3.04 1.89 5.37 1.89c0.74 0 1.46-0.06 2.16-0.18s1.38-0.31 2.04-0.56v-2.37c-0.6 0.31-1.23 0.55-1.88 0.7s-1.32 0.23-2.01 0.23c-1.53 0-2.73-0.44-3.6-1.33s-1.3-2.21-1.3-3.99c0-0.85 0.13-1.61 0.38-2.28S18.59 16.43 19.03 15.96z"/><path d="M31 25c0 3.31-2.69 6-6 6H7c-3.31 0-6-2.69-6-6V7c0-3.31 2.69-6 6-6h18c3.31 0 6 2.69 6 6V25z" style="fill:none;stroke-width:2;stroke:#000"/></svg>
+</span>
+      Needlessly complex
+    </a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="https://mzucker.github.io/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+    <p class="site-desc">Why do it by hand if you can code it in just quadruple the time?
+</p>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Page dewarping</h1>
+    <p class="post-meta"><time datetime="2016-08-15T00:00:00+00:00" itemprop="datePublished">Aug 15, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Flattening images of curled pages, as an optimization problem.</p>
+
+<h1 id="overview">Overview</h1>
+
+<p>A while back, I wrote a script to create PDFs from
+photos of hand-written text. It was nothing special – just
+<a href="http://docs.opencv.org/3.0-last-rst/modules/imgproc/doc/miscellaneous_transformations.html#cv2.adaptiveThreshold">adaptive thresholding</a>
+and combining multiple images into a PDF – but it came in handy
+whenever a student emailed me their homework as a pile of JPEGs. After I
+demoed the program to my fiancée, she ended up asking me to
+run it from time to time on photos of archival documents for her
+linguistics research.  This summer, she came back from the library
+with a number of images where the text was significantly warped due to
+curled pages.</p>
+
+<p>So I decided to write a program that <em>automatically</em> turns pictures like the one on
+the left below to the one on the right:</p>
+
+<p><img src="../../../images/page_dewarp/linguistics_thesis_a_before_after.png" alt="before and after dewarp" class="center-image border" /></p>
+
+<p>As with every project on this blog, the code is
+<a href="https://github.com/mzucker/page_dewarp">up on github</a>. Also feel free
+to <a href="#results">skip to the results section</a> if you want a sneak peek of some more before-and-after shots.</p>
+
+<h1 id="background">Background</h1>
+
+<p>I am by no means the first person to come up with a method for
+document image dewarping – it’s even implemented in Dan Bloomberg’s open-source
+image processing library
+<a href="http://www.leptonica.com/dewarping.html">Leptonica</a> – but when it
+comes to understanding a problem, there’s nothing quite like
+implementing it yourself. Aside from browsing through the Leptonica
+code, I also skimmed a few papers on the topic, including a
+<a href="http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.99.7439">summary</a>
+of the results of a dewarping contest, as well as an
+<a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.552.8971">article</a>
+about the contest-winning Coordinate Transform Model (CTM) method.</p>
+
+<p>Both the Leptonica dewarping method and the CTM method share a similar
+hierarchical problem decomposition:</p>
+
+<ol>
+  <li>
+    <p>Split the text into lines.</p>
+  </li>
+  <li>
+    <p>Find a warp or coordinate transformation that makes the lines
+parallel and horizontal.</p>
+  </li>
+</ol>
+
+<p>To me, Leptonica’s approach to the second subproblem seems a bit
+ad-hoc compared to CTM’s 3D “cylinder” model. To be honest, I had a
+bit of trouble deciphering the CTM paper, but I liked the idea of a
+model-based approach. I decided to create my own parametric model
+where the appearance of the page is determined by a number of
+parameters:</p>
+
+<ul>
+  <li>
+    <p>a rotation vector \(\mathbf{r}\) and a translation vector
+\(\mathbf{t}\), both in \(\mathbb{R}^3\), that parameterize the 3D
+orientation and position of the page</p>
+  </li>
+  <li>
+    <p>two slopes \(\alpha\) and \(\beta\) that specify the curvature of
+the page surface (see spline plots below)</p>
+  </li>
+  <li>
+    <p>the vertical offsets \(y_1, \ldots, y_n\) of \(n\) horizontal
+spans on the page</p>
+  </li>
+  <li>
+    <p>for each span \(i \in \{ 1, \ldots, n \}\), the horizontal
+offsets \(x_i^{(1)}, \ldots, x_i^{(m_i)}\) of \(m_i\) points in
+the horizontal span (all at vertical offset \(y_i\))</p>
+  </li>
+</ul>
+
+<p>The page’s 3D shape comes from sweeping a curve along the local
+\(y\)-axis (top-to-bottom direction). Each \(x\) (left-to-right)
+coordinate on the page maps to a displacement \(z\) of the page
+surface. I model the horizontal cross-section of the page surface as a
+cubic spline whose endpoints are fixed at zero. The shape of the
+spline can be specified completely by its slopes \(\alpha\) and
+\(\beta\) at the endpoints:</p>
+
+<p><img src="../../../images/page_dewarp/cubic_splines.png" alt="cubic splines with varying slope" class="center-image" /></p>
+
+<p>As the plot shows, changing the slope parameters gives a variety of
+“page-like” curves. Below, I’ve generated an animation that fixes the
+page dimensions and all \((x, y)\) coordinates, while varying the
+pose/shape parameters \(\mathbf{r}\), \(\mathbf{t}\), \(\alpha\), and
+\(\beta\) – you can begin to appreciate that the parameter space
+spans a useful variety of page appearances:</p>
+
+<p><img src="../../../images/page_dewarp/page_warping.gif" alt="oooh dancing page" class="center-image" /></p>
+
+<p>Importantly, once the pose/shape parameters are fixed, each \((x,
+y)\) coordinate on the page is projected to a determined location on
+the image plane. Given this rich model, we can now frame the entire
+dewarping puzzle as an optimization problem:</p>
+
+<ul>
+  <li>
+    <p>identify a number of <em>keypoints</em> along horizontal text spans in the
+original photograph</p>
+  </li>
+  <li>
+    <p>starting from a naïve initial guess, find the parameters \(\mathbf{r}\),
+ \(\mathbf{t}\), \(\alpha\), \(\beta\), \(y_1\), \(\ldots\),
+ \(y_n\), \(x_1^{(1)}\), \(\ldots\), \(x_n^{(m_n)}\) 
+ which minimize the <a href="https://en.wikipedia.org/wiki/Reprojection_error">reprojection error</a>
+ of the keypoints</p>
+  </li>
+</ul>
+
+<p>Here is an illustration of reprojection before and after optimization:</p>
+
+<p><img src="../../../images/page_dewarp/linguistics_thesis_a_keypoints.png" alt="reprojection before and after optimization" class="center-image" /></p>
+
+<p>The red points in both image are detected keypoints on text spans, and
+the blue ones are reprojections through the model.  Note that the left
+image (initial guess) assumes no curvature at all, so all blue points
+are collinear; whereas the right image (final optimization output) has
+established the page pose/shape well enough to place almost all of the
+blue points on top of each corresponding red point.</p>
+
+<p>Once we have a good model, we can isolate the pose/shape parameters,
+and invert the resulting page-to-image mapping to dewarp the entire
+image. Of course, the devil is in the details.</p>
+
+<h1 id="procedure">Procedure</h1>
+
+<p>Here is a rough description of the steps I took.</p>
+
+<ol>
+  <li>
+    <p><strong>Obtain page boundaries.</strong> It’s a good idea not to consider the
+entire image, as borders beyond the page can contain lots of
+garbage.  Instead of
+<a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.81.1467">intelligently identifying page borders</a>,
+I opted for a simpler approach, just carving out the middle hunk
+of the image with fixed margins on the edges.</p>
+  </li>
+  <li>
+    <p><strong>Detect text contours.</strong> Next, I look for regions that look
+“text-like”. This is a multi-step process that involves an
+initial adaptive threshold:</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_a_debug_0.1_thresholded.png" alt="detect contours step 1" class="center-half" /></p>
+
+    <p>…<a href="https://en.wikipedia.org/wiki/Dilation_(morphology)">morphological dilation</a>
+by a horizontal box to connect up horizontally adjacent mask pixels:</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_a_debug_0.2_dilated.png" alt="detect contours step 2" class="center-half" /></p>
+
+    <p>…<a href="https://en.wikipedia.org/wiki/Erosion_(morphology)">erosion</a> by
+a vertical box to eliminate single-pixel-high “blips”:</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_a_debug_0.3_eroded.png" alt="detect contours step 3" class="center-half" /></p>
+
+    <p>and finally,
+<a href="https://en.wikipedia.org/wiki/Connected-component_labeling">connected component analysis</a>
+with a filtering step to eliminate any blobs which are too tall
+(compared to their width) or too thick to be text. Each remaining
+text contour is then approximated by its best-fitting line
+segment using
+<a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a>,
+as shown here:</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_a_debug_1_contours.png" alt="detect contours step 4" class="center-half" /></p>
+
+    <p>Since some of the images that my fiancée supplied were of tables
+full of vertical text, I also specialized my program to attempt
+to detect horizontal lines or rules if not enough horizontal text
+is found. Here’s an example image and detected contours:</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_b_line_contours.png" alt="detect contours alt" class="center-image" /></p>
+  </li>
+  <li>
+    <p><strong>Assemble text into spans.</strong> Once the text contours have been
+identified, we need to combine all of the contours corresponding
+to a single horizontal span on the page. There is probably a
+linear-time method for accomplishing this, but I settled on a
+greedy quadratic method here (runtime doesn’t matter much here
+since nearly 100% of program time is spent in optimization
+anyways).</p>
+
+    <p>Here is pseudocode illustrating the overall approach:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>edges = []
+     
+for each contour a:
+  for each other contour b:
+     cost = get_edge_cost(a, b)
+     if cost &lt; INFINITY:
+        edges.append( (cost, a, b) )
+             
+sort edges by cost
+            
+for each edge (cost, a, b) in edges:
+  if a and b are both unconnected:
+    connect a and b with edge e
+</code></pre></div>    </div>
+
+    <p>Basically, we generate candidate edges for every pair of text
+contours, and score them. The resulting cost is infinite if the
+two contours overlap significantly along their lengths, if they
+are too far apart, or if they diverge too much in
+angle. Otherwise, the score is a linear combination of distance
+and change in angle.</p>
+
+    <p>Once the connections are made, the contours can be easily grouped
+into spans; I also filter these to eliminate any that are too
+small to be useful in determining the page model.</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_a_debug_2_spans.png" alt="assemble spans" class="center-half" /></p>
+
+    <p>Above, you can see the span grouping has done a good job
+amalgamating the text contours because each line of text has its
+own color.</p>
+  </li>
+  <li>
+    <p><strong>Sample spans.</strong> Because the parametric model needs discrete
+keypoints, we need to generate a small number of representative
+points on each span. I do this by choosing one keypoint per 20 or
+so pixels of text contour:</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_a_debug_3_span_points.png" alt="sample spans" class="center-half" /></p>
+  </li>
+  <li>
+    <p><strong>Create naïve parameter estimate.</strong> I use PCA to estimate the
+mean orientation of all spans; the resulting principal components
+are used to analytically establish the initial guess of the \(x\)
+and \(y\) coordinates, along with the pose of a flat,
+curvature-free page using
+<a href="http://docs.opencv.org/3.0-last-rst/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html#cv2.solvePnP"><code class="language-plaintext highlighter-rouge">cv2.solvePnP</code></a>.
+The reprojection of the keypoints will be accomplished by
+sampling the cubic spline to obtain the \(z\)-offsets of the
+object points and calling
+<a href="http://docs.opencv.org/3.0-last-rst/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html#cv2.projectPoints"><code class="language-plaintext highlighter-rouge">cv2.projectPoints</code></a>.
+to project into the image plane.</p>
+  </li>
+  <li>
+    <p><strong>Optimize!</strong> To minimize the reprojection error, I use
+<a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html"><code class="language-plaintext highlighter-rouge">scipy.optimize.minimize</code></a>
+with the <code class="language-plaintext highlighter-rouge">'Powell'</code> solver as a black-box, derivative-free
+optimizer. Here’s reprojection again, before and after optimization:</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_a_keypoints.png" alt="reprojection before and after optimization" class="center-image" /></p>
+
+    <p>Nearly 100% of the program runtime is spent doing this
+optimization. I haven’t really experimented much with other
+solvers, or with using a specialized solver for
+<a href="https://en.wikipedia.org/wiki/Non-linear_least_squares">nonlinear least squares</a>
+problems (which is exactly what this is, by the way). It might be
+possible to speed up the optimization a lot!</p>
+  </li>
+  <li>
+    <p><strong>Remap image and threshold.</strong> Once the optimization completes, I
+isolate the pose/shape parameters \(\mathbf{r}\), \(\mathbf{t}\),
+\(\alpha\), and \(\beta\) to establish a coordinate
+transformation. The actual dewarp is obtained by projecting a
+dense mesh of 3D page points via
+<a href="http://docs.opencv.org/3.0-last-rst/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html#cv2.projectPoints"><code class="language-plaintext highlighter-rouge">cv2.projectPoints</code></a>
+and supplying the resulting image coordinates to
+<a href="http://docs.opencv.org/3.0-last-rst/modules/imgproc/doc/geometric_transformations.html#cv2.remap"><code class="language-plaintext highlighter-rouge">cv2.remap</code></a>.
+I get the final output with
+<a href="http://docs.opencv.org/3.0-last-rst/modules/imgproc/doc/miscellaneous_transformations.html#cv2.adaptiveThreshold"><code class="language-plaintext highlighter-rouge">cv2.adaptiveThreshold</code></a>
+and save it as a bi-level PNG using
+<a href="http://python-pillow.org/">Pillow</a>. Again, before and after
+shots:</p>
+
+    <p><img src="../../../images/page_dewarp/linguistics_thesis_a_before_after.png" alt="before and after dewarp" class="center-image border" /></p>
+  </li>
+</ol>
+
+<h1 id="results">Results</h1>
+
+<p>I’ve included several
+<a href="https://github.com/mzucker/page_dewarp/tree/master/example_input">example images</a>
+in the github repository to illustrate how the program works on a
+variety of inputs. Here are the images, along with the program output:</p>
+
+<p><strong>boston_cooking_a.jpg</strong>:</p>
+
+<p><img src="../../../images/page_dewarp/boston_cooking_a_before_after.png" alt="before and after dewarp" class="center-image border" /></p>
+
+<p><strong>boston_cooking_b.jpg</strong>:</p>
+
+<p><img src="../../../images/page_dewarp/boston_cooking_b_before_after.png" alt="before and after dewarp" class="center-image border" /></p>
+
+<p><strong>linguistics_thesis_a.jpg</strong>:</p>
+
+<p><img src="../../../images/page_dewarp/linguistics_thesis_a_before_after.png" alt="before and after dewarp" class="center-image border" /></p>
+
+<p><strong>linguistics_thesis_b.jpg</strong>:</p>
+
+<p><img src="../../../images/page_dewarp/linguistics_thesis_b_before_after.png" alt="before and after dewarp" class="center-image border" /></p>
+
+<p>I also compiled some statistics about each program run (take the
+runtimes with a grain of salt, this is for a single run on my 2012
+MacBook Pro):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Input</th>
+      <th style="text-align: center">Spans</th>
+      <th style="text-align: center">Keypoints</th>
+      <th style="text-align: center">Parameters</th>
+      <th style="text-align: center">Opt. time (s)</th>
+      <th style="text-align: center">Total time (s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">boston_cooking_a.jpg</td>
+      <td style="text-align: center">38</td>
+      <td style="text-align: center">554</td>
+      <td style="text-align: center">600</td>
+      <td style="text-align: center">23.3</td>
+      <td style="text-align: center">24.8</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">boston_cooking_b.jpg</td>
+      <td style="text-align: center">38</td>
+      <td style="text-align: center">475</td>
+      <td style="text-align: center">521</td>
+      <td style="text-align: center">18.0</td>
+      <td style="text-align: center">18.8</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">linguistics_thesis_a.jpg</td>
+      <td style="text-align: center">20</td>
+      <td style="text-align: center">161</td>
+      <td style="text-align: center">189</td>
+      <td style="text-align: center">5.1</td>
+      <td style="text-align: center">6.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">linguistics_thesis_b.jpg</td>
+      <td style="text-align: center">7</td>
+      <td style="text-align: center">89</td>
+      <td style="text-align: center">104</td>
+      <td style="text-align: center">4.2</td>
+      <td style="text-align: center">5.3</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>You can see these are not exactly <em>small</em> optimization problems. The
+smallest one has 89 parameters in the model, and the largest
+has 600. Still, I’m sure the optimization speed could be improved by
+trying out different methods and/or using a compiled language.</p>
+
+<h1 id="wrapping-up">Wrapping up</h1>
+
+<p>The way this project unfolded represents a fairly typical workflow for
+me these days: do a bit of reading to collect background knowledge,
+and then figure out how to formulate the entire problem as the output
+of some optimization process. I find it’s a pretty effective way of
+tackling a large number of technical problems. Although I didn’t think
+of it at the time, the overall approach I took here is reminiscent of
+both
+<a href="https://people.eecs.berkeley.edu/~rbg/latent/">deformable part models</a>
+and
+<a href="https://www.cs.cmu.edu/~efros/courses/AP06/Papers/matthews_ijcv_2004.pdf">active appearance models</a>,
+though not as sophisticated as either.</p>
+
+<p>Both Leptonica and the CTM method go one step further than I did, and
+try to model/repair horizontal distortion as well as vertical. That
+would be useful for my code, too – because the cubic spline is not an
+<a href="https://en.wikipedia.org/wiki/Arc_length">arc-length</a>
+parameterization, the text is slightly compressed in areas where the
+cubic spline has a large slope. Since this project was mostly intended
+as a proof-of-concept, I decided not to pursue the issue further.</p>
+
+<p>Before putting up the final code on github, I tried out using the
+automated Python style checker <a href="https://www.pylint.org/">Pylint</a> for
+the first time. For some reason, on its first run it informed me that
+all of the <code class="language-plaintext highlighter-rouge">cv2</code> module members were undefined, leading to an initial
+rating of -6.88/10 (yes, negative). Putting the line</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># pylint: disable=E1101
+</span></code></pre></div></div>
+
+<p>near the top of the file made it shut up about that. After tweaking
+the program for a while to make Pylint happier, I got the score up to
+9.09/10, which seems good enough for now. I’m not sure I agree 100%
+with all of its default settings, but it was interesting to try it out
+and learn a new tool.</p>
+
+<p>I do all of my coding these days in
+<a href="https://www.gnu.org/software/emacs/">GNU Emacs</a>, which usually suits
+my needs; however, messing around with Pylint led me to discover a
+feature I had never used. Pylint is not fond of short variable names
+like <code class="language-plaintext highlighter-rouge">h</code> (but has no problem with <code class="language-plaintext highlighter-rouge">i</code>, go figure). If I use the normal
+Emacs <code class="language-plaintext highlighter-rouge">query-replace</code> function bound to <code class="language-plaintext highlighter-rouge">M-%</code> and try to replace <code class="language-plaintext highlighter-rouge">h</code>
+with <code class="language-plaintext highlighter-rouge">height</code> everywhere, I have to pay close attention to make sure
+that it doesn’t also try to replace the h other identifiers (like
+<code class="language-plaintext highlighter-rouge">shape</code>) as well. A while back, I discovered I could sidestep this by
+using <code class="language-plaintext highlighter-rouge">query-replace-regexp</code> instead, and entering
+the regular expression <code class="language-plaintext highlighter-rouge">\bh\b</code> as the replacement text (the <code class="language-plaintext highlighter-rouge">\b</code>
+stands for a word <em>b</em>oundary, so it will only match the entire “word”
+<code class="language-plaintext highlighter-rouge">h</code>). On the other hand, it’s a bit more work, and I thought there
+must be a better place to do “whole-word” replacement. A bunch of
+Googling led me to
+<a href="http://emacs.stackexchange.com/a/12691/12975">this Stack Exchange answer</a>,
+which says that using the <code class="language-plaintext highlighter-rouge">universal-argument</code> command <code class="language-plaintext highlighter-rouge">C-u</code> in Emacs
+<em>before</em> a <code class="language-plaintext highlighter-rouge">query-replace</code> will do exactly what I want. I never knew
+about <code class="language-plaintext highlighter-rouge">universal-argument</code> before – always good to learn new tricks!</p>
+
+<p>At this point, I don’t anticipate doing much more with the dewarping
+code. It could definitely use a thorough round of commenting, but the
+basics are pretty much spelled out in this document, so I’ll just slap
+a link here on the
+<a href="https://github.com/mzucker/page_dewarp">github repo</a> and call it a
+day. Who knows – maybe I’ll refer back to this project again the next
+time I teach
+<a href="http://www.swarthmore.edu/NatSci/mzucker1/e27_s2016/">computer vision</a>…</p>
+
+<h1 style="border-top: 1px solid #bbb; margin-top: 24px; padding-top: 24px">Comments</h1>
+<div class="comment">
+<p>Comments are closed, see <a href="https://mzucker.github.io/2017/05/08/no-more-disqus.html">here</a> for details.</p>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Quentin Rousseau</span> &middot; <span class="comment-date">2016-Aug-18</span>
+</div>
+<div class="comment-body">
+<p>Amazing work !</p>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Gleb Bahmutov</span> &middot; <span class="comment-date">2016-Aug-18</span>
+</div>
+<div class="comment-body">
+<p>great job and good explanation.</p>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Vinit</span> &middot; <span class="comment-date">2016-Aug-18</span>
+</div>
+<div class="comment-body">
+<p>Love this Post. Great explanation.</p>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Derek Kozel</span> &middot; <span class="comment-date">2016-Aug-19</span>
+</div>
+<div class="comment-body">
+<p>This looks like it was a great project, thanks for sharing it! It would be interesting to see how it performs with a high resolution, well illuminated page. Since the code is open maybe I'll give it a shot. :)</p>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Paul Milovanov</span> &middot; <span class="comment-date">2016-Aug-19</span>
+</div>
+<div class="comment-body">
+<p>Consider mentioning Dan Bloomberg as the author of the original work as well as Leptonica. :)</p>
+</div>
+<div class="comment-children">
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Matt Zucker</span> &middot; <span class="comment-date">2016-Aug-19</span>
+</div>
+<div class="comment-body">
+<p>Updated to add.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Rabbi Yehoshua Scult</span> &middot; <span class="comment-date">2016-Aug-19</span>
+</div>
+<div class="comment-body">
+<p>I am the Supreme Idiot. Hi! Could you turn this into a  EXE that would execute on Windows 7? What in the world are Py files?<br />TIA<br />scult1@gmail.com</p>
+</div>
+<div class="comment-children">
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Stuart Woodward</span> &middot; <span class="comment-date">2016-Aug-19</span>
+</div>
+<div class="comment-body">
+<p>.py are Python source code files. If you install Python for Windows then you can run them.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Oleg Kovalov</span> &middot; <span class="comment-date">2016-Aug-19</span>
+</div>
+<div class="comment-body">
+<p>Awesome job and good explanation! *hugefan.png*</p>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">SantoshSrinivas79</span> &middot; <span class="comment-date">2016-Aug-20</span>
+</div>
+<div class="comment-body">
+<p>Thanks a ton!</p>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">JI Xiang</span> &middot; <span class="comment-date">2016-Aug-21</span>
+</div>
+<div class="comment-body">
+<p>Actually `universal-argument` is used quite a lot in places where you want to alter the original command slightly. I'm using [Spacemacs](<a href="https://github.com/syl20bnr/spacemacs/)" rel="nofollow noopener">https://github.com/syl20bnr/sp...</a> though and I'm used to performing a Vim-style replacement which automatically utilizes regex syntax.</p>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Marius Gedminas</span> &middot; <span class="comment-date">2016-Sep-23</span>
+</div>
+<div class="comment-body">
+<p>Pylint is very opinionated and overwhelms one with false-positive warnings when used out of the box, without a custom configuration file.</p><p>Pyflakes is gentler.  (I tend to use flake8 because it augments pyflakes with a config file letting you disable some warnings, but flake8 also pulls in pep8 which nitpicks my style in a bit too rigid way.)</p>
+</div>
+<div class="comment-children">
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">Matt Zucker</span> &middot; <span class="comment-date">2016-Sep-23</span>
+</div>
+<div class="comment-body">
+<p>Thanks - maybe I'll check it out on my next Python project.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="comment">
+<div class="comment-header">
+<span class="comment-author">ChenTim</span> &middot; <span class="comment-date">2016-Oct-27</span>
+</div>
+<div class="comment-body">
+<p>Great article and implementation!<br />This free app can also dewarp curled book pages and get decent image quality<br /><a href="https://itunes.apple.com/app/id1112445201?mt=8" rel="nofollow noopener">https://itunes.apple.com/app/i...</a></p>
+</div>
+</div>
+
+
+  </div>
+  <!-- load mathjax -->
+  <script type="text/javascript" async
+          src="../../../../cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJaxdda6.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+</article>
+
+
+      </div>
+    </div>
+
+  </body>
+
+
+<!-- Mirrored from mzucker.github.io/2016/08/15/page-dewarping.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 26 Feb 2023 13:46:19 GMT -->
+</html>
